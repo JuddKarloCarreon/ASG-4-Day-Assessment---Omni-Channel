@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email</title>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.14.0/themes/smoothness/jquery-ui.css">
+    <%- include('partials/mandatory-head.ejs') %>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.14.0/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/javascripts/email.js"></script>
+  </head>
+  <body>
+    <main class="flex flex-col h-screen">
+      <%- include('partials/navbar.ejs', { navbar_links, current_page }) %>
+      <div id="tabs" class="flex flex-col h-full">
+        <ul>
+          <li><a href="#tabs-1">Inbox</a></li>
+          <li><a href="#tabs-2">Selected Email</a></li>
+          <li><a href="#tabs-3">Compose</a></li>
+        </ul>
+        <div id="tabs-1" class="flex flex-col flex-1 m-1">
+          <div class="overflow-y-auto h-full w-full px-1 border border-solid rounded-md border-slate-950">
+            <table class="w-full">
+              <thead>
+                <tr>
+                  <td>From</td>
+                  <td>Subject</td>
+                  <td>Date</td>
+                </tr>
+              </thead>
+              <tbody id="inbox" class="divide-y">
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div id="tabs-2" class="h-full flex flex-col md:m-10 m-1">
+          <div class="overflow-y-scroll h-5/6 px-1 border border-solid rounded-md border-slate-950" id="message_area">
+            <p id="from_email"></p>
+            <p id="to_email"></p>
+            <p id="subject_email" class="mb-5"></p>
+            <div id="html_email"></div>
+          </div>
+          <div id="preview" class="h-1/6 mt-2">
+          </div>
+        </div>
+        <div id="tabs-3" class="flex flex-col flex-1 md:m-10 m-1">
+          <form action="#" enctype="multipart/form-data" class="flex flex-col flex-1 md:m-10 m-1">
+            <section class="flex-1 flex flex-col">
+              <div class="flex flex-col mt-2 items-center">
+                <table class="w-full mb-1">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <label for="recepient_email" class="mr-2">To:</label>
+                      </td>
+                      <td class="w-full">
+                        <input type="text" name="recepient" id="recepient_email" class="flex-1 w-full rounded-md border-0 pl-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" required>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label for="cc" class="mr-2">CC:</label>
+                      </td>
+                      <td class="w-full">
+                        <input type="text" name="cc" id="cc" class="flex-1 w-full rounded-md border-0 pl-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label for="bcc" class="mr-2">BCC:</label>
+                      </td>
+                      <td class="w-full">
+                        <input type="text" name="bcc" id="bcc" class="flex-1 w-full rounded-md border-0 pl-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label for="subject" class="mr-2">Subject:</label>
+                      </td>
+                      <td class="w-full">
+                        <input type="text" name="bcc" id="subject" class="flex-1 w-full rounded-md border-0 pl-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="flex space-x-5 mb-1 bg-slate-200 p-1 w-full">
+                  <select id="font-family">
+                    <option value="Arial, sans-serif">Arial</option>
+                    <option value="'Times New Roman', serif">Times New Roman</option>
+                    <option value="'Courier New', monospace">Courier New</option>
+                    <option value="Verdana, sans-serif">Verdana</option>
+                  </select>
+                  <select id="font-size">
+                    <option value="10px">Small</option>
+                    <option value="16px" selected>Medium</option>
+                    <option value="22px">Large</option>
+                    <option value="28px">Extra</option>
+                  </select>
+                  <div class="cursor-pointer" id="bold">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linejoin="round" d="M6.75 3.744h-.753v8.25h7.125a4.125 4.125 0 0 0 0-8.25H6.75Zm0 0v.38m0 16.122h6.747a4.5 4.5 0 0 0 0-9.001h-7.5v9h.753Zm0 0v-.37m0-15.751h6a3.75 3.75 0 1 1 0 7.5h-6m0-7.5v7.5m0 0v8.25m0-8.25h6.375a4.125 4.125 0 0 1 0 8.25H6.75m.747-15.38h4.875a3.375 3.375 0 0 1 0 6.75H7.497v-6.75Zm0 7.5h5.25a3.75 3.75 0 0 1 0 7.5h-5.25v-7.5Z" />
+                    </svg>
+                  </div>
+                  <div class="cursor-pointer" id="italic">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5.248 20.246H9.05m0 0h3.696m-3.696 0 5.893-16.502m0 0h-3.697m3.697 0h3.803" />
+                    </svg>                    
+                  </div>
+                  <div class="cursor-pointer" id="underline">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17.995 3.744v7.5a6 6 0 1 1-12 0v-7.5m-2.25 16.502h16.5" />
+                    </svg>                    
+                  </div>
+                </div>
+                <div
+                  class="flex-1 min-h-20 w-full rounded-md border-0 pl-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  id="email_content"
+                  contenteditable="true"
+                  style="font-family: Arial, sans-serif; font-size: 16px;"
+                >
+                </div>
+                <div id="compose_preview" class="mt-2 hidden">
+                  <div id="compose_preview_content"class="inline-block"></div>
+                  <span class="cursor-pointer text-red-700" id="remove_upload">X</span>
+                </div>
+                <div class="flex items-center mt-1">
+                  <label for="attachment" class="cursor-pointer ml-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13" />
+                    </svg>              
+                  </label>
+                  <input type="file" name="attachment" id="attachment" class="hidden">
+                  <button type="submit" class="ml-1 rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Send</button>
+                </div>
+              </div>
+            </section>
+          </form>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Message</title>
+  <%- include('partials/mandatory-head.ejs') %>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript" src="/javascripts/message.js"></script>
+</head>
+<body>
+  <main class="flex flex-col h-screen">
+    <%- include('partials/navbar.ejs', { navbar_links, current_page }) %>
+    <form action="#" enctype="multipart/form-data" class="flex flex-col flex-1 md:m-10 m-1">
+      <section class="flex-1 flex flex-col">
+        <p>Received Messages:</p>
+        <div class="overflow-y-auto flex-1 px-1 border border-solid rounded-md border-slate-950" id="message_area">
+        </div>
+        <div class="flex flex-col mt-2 items-center">
+          <table class="w-full">
+            <tbody>
+              <tr>
+                <td class="whitespace-nowrap">
+                  <label for="to">To:</label>
+                </td>
+                <td class="w-full">
+                  <input type="text" name="to" id="to" class="flex-1 mb-2 ml-1 w-full rounded-md border-0 pl-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" required>
+                </td>
+              </tr>
+              <tr>
+                <td class="whitespace-nowrap">
+                  <label for="attachment">Media URL:</label>
+                </td>
+                <td>
+                  <input type="text" name="attachment" id="attachment" class="flex-1 mb-2 ml-1 w-full rounded-md border-0 pl-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="flex justify-start w-full">
+            <label for="message">Message:</label>
+          </div>
+          <textarea class="flex-1 w-full mb-2 rounded-md border-0 pl-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" name="message" id="message" rows="5"></textarea>
+          <button type="submit" class="ml-1 w-full rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Send</button>
+        </div>
+      </section>
+    </form>
+  </main>
+</body>
+</html>

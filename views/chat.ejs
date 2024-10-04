@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <%- include('partials/mandatory-head.ejs') %>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/javascripts/chat.js"></script>
+  </head>
+  <body>
+    <main class="flex flex-col h-screen">
+      <%- include('partials/navbar.ejs', { navbar_links, current_page }) %>
+      <form action="#" enctype="multipart/form-data" class="flex flex-col flex-1 md:m-10 m-1">
+        <div class="flex flex-none">
+          <label for="send_to">Chat With:</label>
+          <select name="recepient_id" id="send_to" class="ml-1 mb-2 flex-1">
+            <option value="" class="hidden">Select a user</option>
+            <% users.forEach((user) => { %>
+              <option value="<%= user.id %>"><%= user.username %></option>
+            <% }); %>
+          </select>
+        </div>
+        <section class="flex-1 flex flex-col">
+          <div class="overflow-y-auto flex-1 px-1 border border-solid rounded-md border-slate-950" id="message_area">
+          </div>
+          <div id="preview" class="mt-2 hidden">
+            <div id="preview_content"class="inline-block"></div>
+            <span class="cursor-pointer text-red-700" id="remove_upload">X</span>
+          </div>
+          <div class="flex mt-2 items-center">
+            <input type="text" class="flex-1 rounded-md border-0 pl-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" name="message" id="chat_box" placeholder="Enter chat...">
+            <label for="attachment" class="cursor-pointer ml-1">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
+              </svg>
+            </label>
+            <input type="file" name="attachment" id="attachment" class="hidden">
+            <button type="submit" class="ml-1 rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Send</button>
+          </div>
+        </section>
+      </form>
+    </main>
+  </body>
+</html>

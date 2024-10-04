@@ -1,0 +1,31 @@
+<%
+  let current_page_class = "rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white";
+  let other_page_class = "rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white";
+  let mobile_current_page_class = "block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white";
+  let mobile_other_page_class = "block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white";
+%>
+
+<nav class="bg-gray-800">
+  <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+    <div class="relative hidden sm:block pt-1 flex h-9 items-center justify-between">
+      <div class="flex w-full items-center justify-center">
+        <div class="hidden sm:block">
+          <div class="space-x-4">
+            <% navbar_links.forEach(obj => { %>
+              <a href="<%= obj.link %>" class="<%= (obj.link === current_page) ? current_page_class : other_page_class %>"><%= obj.name %></a>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile menu, show/hide based on menu state. -->
+  <div class="sm:hidden" id="mobile-menu">
+    <div class="space-y-1 px-2 pb-3 pt-2">
+      <% navbar_links.forEach(obj => { %>
+        <a href="<%= obj.link %>" class="<%= (obj.link === current_page) ? mobile_current_page_class : mobile_other_page_class %>"><%= obj.name %></a>
+      <% }) %>
+    </div>
+  </div>
+</nav>

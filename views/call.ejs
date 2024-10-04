@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Call</title>
+    <%- include('partials/mandatory-head.ejs') %>
+    <script src="https://media.twiliocdn.com/sdk/js/client/v1.13/twilio.min.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/javascripts/call.js"></script>
+  </head>
+  <body>
+    <main class="flex flex-col h-screen">
+      <%- include('partials/navbar.ejs', { navbar_links, current_page }) %>
+      <div class="flex flex-col items-center">
+        <p id="status" class="mt-2">Please wait for call to initialize...</p>
+        <div class="flex flex-col sm:flex-row mt-5 items-center md:px-96 px-3 hidden" id="callArea">
+          <label for="call_number" class="mr-1">Call:</label>
+          <input type="text" name="call" id="call_number" class="flex-1 mr-0 sm:mr-1 mb-2 sm:mb-0 sm:w-fit w-full rounded-md border-0 pl-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+          <button type="button" id="callButton" class="ml-0 sm:ml-1 sm:w-fit w-full rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Call</button>
+        </div>
+        <div id="callingArea" class="hidden flex flex-col mt-5">
+          <button type="button" id="hangupButton" class="ml-0 sm:ml-1 sm:w-fit w-full rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">Hang up</button>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
